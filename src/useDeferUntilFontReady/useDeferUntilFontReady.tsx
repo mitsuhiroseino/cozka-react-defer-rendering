@@ -13,20 +13,27 @@ export default function useDeferUntilFontReady(
   fontFamily: string | null | undefined,
   options: UseDeferUntilFontReadyOptions,
 ): DeferRenderingResult {
-  const { fontValiant, timeout = 3000, ...nodes } = options;
+  const { fontVariant, timeout = 4000, loader, ...nodes } = options;
   const [state, setState] = useState<RenderingState>('pending');
 
   useEffect(() => {
-    const observer = new FontFaceObserver(fontFamily, fontValiant);
-    observer
-      .load(null, timeout)
-      .then(() => {
-        setState('ready');
-      })
-      .catch(() => {
-        setState('error');
-      });
-  }, [fontFamily, fontValiant, timeout]);
+    const observe = () =>
+      new FontFaceObserver(fontFamily, fontVariant)
+        .load(null, timeout)
+        .then(() => {
+          setState('ready');
+        })
+        .catch(() => {
+          setState('error');
+        });
+    if (loader) {
+      loader()
+        .then(() => observe())
+        .catch(() => setState('error'));
+    } else {
+      observe();
+    }
+  }, [fontFamily, fontVariant, timeout, loader]);
 
   return {
     state,

@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+import { debounce } from 'lodash';
+import { useMemo, useState } from 'react';
 import { DeferRenderingWithHandlersResult, RenderingState } from '../types';
 import { UseDeferUntilReadyOptions } from './types';
 
@@ -10,11 +11,20 @@ import { UseDeferUntilReadyOptions } from './types';
 export default function useDeferUntilReady(
   options: UseDeferUntilReadyOptions,
 ): DeferRenderingWithHandlersResult {
-  const { ...nodes } = options;
+  const { onReadyDelay, onErrorDelay, onPendingDelay, ...nodes } = options;
   const [state, setState] = useState<RenderingState>('pending');
-  const onReady = useCallback(() => setState('ready'), []);
-  const onError = useCallback(() => setState('error'), []);
-  const onPending = useCallback(() => setState('pending'), []);
+  const onReady = useMemo(() => {
+    const fn = () => setState('ready');
+    return onReadyDelay != null ? debounce(fn, onReadyDelay) : fn;
+  }, [onReadyDelay]);
+  const onError = useMemo(() => {
+    const fn = () => setState('error');
+    return onErrorDelay != null ? debounce(fn, onErrorDelay) : fn;
+  }, [onErrorDelay]);
+  const onPending = useMemo(() => {
+    const fn = () => setState('pending');
+    return onPendingDelay != null ? debounce(fn, onPendingDelay) : fn;
+  }, [onPendingDelay]);
 
   return {
     state,
