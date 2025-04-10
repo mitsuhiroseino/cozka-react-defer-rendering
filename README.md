@@ -1,1 +1,1 @@
-# cozka-react-defer-rendering
+# @cozka/react-defer-rendering
