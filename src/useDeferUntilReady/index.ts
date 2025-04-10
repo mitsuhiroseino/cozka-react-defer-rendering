@@ -1,2 +1,2 @@
 export type * from './types';
-export { default } from './useDeferUntilFontReady';
+export { default } from './useDeferUntilReady';
