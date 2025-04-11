@@ -1,6 +1,8 @@
+import { set } from 'lodash';
 import debounce from 'lodash-es/debounce';
 import { useEffect, useState } from 'react';
-import { DeferRenderingResult, RenderingState } from '../types';
+import { DeferRenderingResult } from '../types';
+import useDeferUntilTrue from '../useDeferUntilTrue';
 import { UseDeferUntilScrolledOptions } from './types';
 
 /**
@@ -13,12 +15,17 @@ export default function useDeferUntilScrolled(
   target: HTMLElement | null | undefined,
   options: UseDeferUntilScrolledOptions = {},
 ): DeferRenderingResult {
-  const { container = window, detectionDelay = 100, ...nodes } = options;
-  const [state, setState] = useState<RenderingState>('pending');
+  const {
+    container = window,
+    detectionDelay = 100,
+    preserveOnceReady,
+    ...opts
+  } = options;
+  const [condition, setCondition] = useState(false);
 
   useEffect(() => {
     const isWindow = container === window;
-    const handleScroll = () => {
+    const checkScroll = () => {
       if (target) {
         const containerElement = isWindow
           ? document.documentElement
@@ -28,18 +35,26 @@ export default function useDeferUntilScrolled(
         const isVisible =
           rect.top < containerElement[height] && rect.bottom >= 0;
 
-        if (isVisible) {
-          setState('ready');
-        } else {
-          setState('pending');
-        }
+        return isVisible;
+      } else {
+        return false;
       }
     };
 
     // 初期チェック
-    handleScroll();
+    if (checkScroll()) {
+      setCondition(true);
+      return;
+    }
 
-    const debouncedHandleScroll = debounce(handleScroll, detectionDelay);
+    const debouncedHandleScroll = debounce(() => {
+      const isVisible = checkScroll();
+      setCondition(isVisible);
+      if (preserveOnceReady) {
+        observedTarget.removeEventListener('scroll', debouncedHandleScroll);
+      }
+    }, detectionDelay);
+
     // スクロールイベントリスナーの追加
     const observedTarget = isWindow ? window : container;
     observedTarget.addEventListener('scroll', debouncedHandleScroll);
@@ -50,8 +65,5 @@ export default function useDeferUntilScrolled(
     };
   }, [target, container]);
 
-  return {
-    state,
-    node: nodes[state],
-  };
+  return useDeferUntilTrue(condition, { preserveOnceReady, ...opts });
 }

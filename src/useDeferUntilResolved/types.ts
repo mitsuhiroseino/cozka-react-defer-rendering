@@ -1,4 +1,3 @@
-import { DeferRenderingWithErrorOptionsBase } from '../types';
+import { useDeferUntilReadyOptions } from '../useDeferUntilReady';
 
-export type UseDeferUntilResolvedOptions =
-  DeferRenderingWithErrorOptionsBase & {};
+export type UseDeferUntilResolvedOptions = useDeferUntilReadyOptions;

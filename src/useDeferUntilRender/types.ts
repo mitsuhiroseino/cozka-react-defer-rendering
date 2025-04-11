@@ -2,9 +2,9 @@ import { UseDeferUntilTrueOptions } from '../useDeferUntilTrue';
 
 export type UseDeferUntilBreakpointOptions = UseDeferUntilTrueOptions & {
   /**
-   * スクロールイベントのデバウンス時間（ミリ秒）
-   * デフォルトは100ms
-   * @default 100
+   * エレメントを監視する間隔（ミリ秒）
+   * デフォルトは400ms
+   * @default 400
    */
-  detectionDelay?: number;
+  interval?: number;
 };

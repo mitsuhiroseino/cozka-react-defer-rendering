@@ -1,6 +1,6 @@
-import { DeferRenderingOptionsBase } from '../types';
+import { UseDeferUntilTrueOptions } from '../useDeferUntilTrue';
 
-export type UseDeferUntilVisibleOptions = DeferRenderingOptionsBase & {
+export type UseDeferUntilVisibleOptions = UseDeferUntilTrueOptions & {
   /**
    * 監視するコンテナー
    * デフォルトはnull（ビューポート）

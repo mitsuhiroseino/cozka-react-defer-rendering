@@ -1,7 +1,7 @@
 import useIsMounted from '@cozka/react-utils/useIsMounted';
-import {} from '@cozka/utils-function';
 import { useEffect, useState } from 'react';
 import { DeferRenderingResult, RenderingState } from '../types';
+import useDeferUntilTrue from '../useDeferUntilTrue';
 import { UseDeferUntilTimeoutOptions } from './types';
 
 /**
@@ -14,25 +14,18 @@ export default function useDeferUntilTimeout(
   defer: number | null | undefined,
   options: UseDeferUntilTimeoutOptions = {},
 ): DeferRenderingResult {
-  const { ...nodes } = options;
-  const [state, setState] = useState<RenderingState>(
-    !!defer ? 'pending' : 'ready',
-  );
-
+  const [condition, setCondition] = useState(!defer);
   const isMounted = useIsMounted();
 
   useEffect(() => {
     if (defer) {
       setTimeout(() => {
         if (isMounted()) {
-          setState('ready');
+          setCondition(true);
         }
       }, defer);
     }
   }, []);
 
-  return {
-    state,
-    node: nodes[state],
-  };
+  return useDeferUntilTrue(condition, options);
 }

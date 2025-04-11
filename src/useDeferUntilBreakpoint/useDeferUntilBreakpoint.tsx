@@ -1,50 +1,52 @@
+import useIsMounted from '@cozka/react-utils/useIsMounted';
 import debounce from 'lodash-es/debounce';
 import { useEffect, useState } from 'react';
-import { DeferRenderingResult, RenderingState } from '../types';
+import { DeferRenderingResult } from '../types';
+import useDeferUntilTrue from '../useDeferUntilTrue';
 import { UseDeferUntilBreakpointOptions } from './types';
 
 /**
  * メディアクエリーが一致するまで描画を遅延させるhook
- * @param query メディアクエリ（例: '(max-width: 768px)'）
+ * @param mediaQuery メディアクエリ（例: '(max-width: 768px)'）
  * @param options オプション
  * @returns state（'pending', 'ready'）と状態に応じたノード
  */
 export default function useDeferUntilBreakpoint(
-  query: string,
+  mediaQuery: string,
   options: UseDeferUntilBreakpointOptions = {},
 ): DeferRenderingResult {
-  const { detectionDelay = 100, ...nodes } = options;
-  const [state, setState] = useState<RenderingState>('pending');
+  const { detectionDelay = 100, preserveOnceReady, ...opts } = options;
+  const [condition, setCondition] = useState(false);
 
   useEffect(() => {
-    const mediaQueryList = window.matchMedia(query);
+    const mediaQueryList = window.matchMedia(mediaQuery);
 
     // 初期状態の設定
-    if (mediaQueryList.matches) {
-      setState('ready');
-    } else {
-      setState('pending');
+    const matches = mediaQueryList.matches;
+    setCondition(matches);
+    if (preserveOnceReady && matches) {
+      // 一度readyになったらready状態を保持する場合で既にreadyな場合は何もしない
+      return;
     }
 
     // メディアクエリの変更を監視
     const handleChange = debounce((event: MediaQueryListEvent) => {
-      if (event.matches) {
-        setState('ready');
-      } else {
-        setState('pending');
+      if (useIsMounted()) {
+        const matches = event.matches;
+        setCondition(matches);
+        if (preserveOnceReady && matches) {
+          // 一度readyになったらready状態を保持する場合でreadyになった場合はこれで終わり
+          mediaQueryList.removeEventListener('change', handleChange);
+        }
       }
     }, detectionDelay);
 
     mediaQueryList.addEventListener('change', handleChange);
 
-    // クリーンアップ: イベントリスナーの削除
     return () => {
       mediaQueryList.removeEventListener('change', handleChange);
     };
-  }, [query]);
+  }, [mediaQuery, preserveOnceReady, detectionDelay]);
 
-  return {
-    state,
-    node: nodes[state],
-  };
+  return useDeferUntilTrue(condition, { preserveOnceReady, ...opts });
 }

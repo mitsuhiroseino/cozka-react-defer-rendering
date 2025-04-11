@@ -1,5 +1,7 @@
+import useIsMounted from '@cozka/react-utils/useIsMounted';
 import { useEffect, useState } from 'react';
 import { DeferRenderingResult, RenderingState } from '../types';
+import useDeferUntilTrue from '../useDeferUntilTrue';
 import { UseDeferUntilVisibleOptions } from './types';
 
 /**
@@ -12,18 +14,17 @@ export default function useDeferUntilVisible(
   target: HTMLElement | null | undefined,
   options: UseDeferUntilVisibleOptions = {},
 ): DeferRenderingResult {
-  const { container = null, threshold = 0.1, ...nodes } = options;
-  const [state, setState] = useState<RenderingState>('pending');
+  const { container = null, threshold = 0.1, ...opts } = options;
+  const [condition, setCondition] = useState(false);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (target) {
       const observer = new IntersectionObserver(
         (entries) => {
-          const entry = entries[0];
-          if (entry.isIntersecting) {
-            setState('ready');
-          } else {
-            setState('pending');
+          if (isMounted()) {
+            const entry = entries[0];
+            setCondition(entry.isIntersecting);
           }
         },
         {
@@ -40,8 +41,5 @@ export default function useDeferUntilVisible(
     }
   }, [target, container, threshold]);
 
-  return {
-    state,
-    node: nodes[state],
-  };
+  return useDeferUntilTrue(condition, opts);
 }

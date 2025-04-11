@@ -1,6 +1,8 @@
+import useIsMounted from '@cozka/react-utils/useIsMounted';
 import FontFaceObserver from 'fontfaceobserver';
 import { useEffect, useState } from 'react';
 import { DeferRenderingResult, RenderingState } from '../types';
+import useDeferUntilStateChange from '../useDeferUntilReady';
 import { UseDeferUntilFontReadyOptions } from './types';
 
 /**
@@ -13,30 +15,39 @@ export default function useDeferUntilFontReady(
   fontFamily: string | null | undefined,
   options: UseDeferUntilFontReadyOptions,
 ): DeferRenderingResult {
-  const { fontVariant, timeout = 4000, loader, ...nodes } = options;
+  const { fontVariant, timeout = 4000, loader, ...opts } = options;
   const [state, setState] = useState<RenderingState>('pending');
+  const isMounted = useIsMounted();
 
   useEffect(() => {
-    const observe = () =>
+    const observe = () => {
       new FontFaceObserver(fontFamily, fontVariant)
         .load(null, timeout)
         .then(() => {
-          setState('ready');
+          if (isMounted()) {
+            setState('ready');
+          }
         })
         .catch(() => {
-          setState('error');
+          if (isMounted()) {
+            setState('error');
+          }
         });
+    };
+
+    setState('pending');
     if (loader) {
       loader()
         .then(() => observe())
-        .catch(() => setState('error'));
+        .catch(() => {
+          if (isMounted()) {
+            setState('error');
+          }
+        });
     } else {
       observe();
     }
   }, [fontFamily, fontVariant, timeout, loader]);
 
-  return {
-    state,
-    node: nodes[state],
-  };
+  return useDeferUntilStateChange(state, opts);
 }

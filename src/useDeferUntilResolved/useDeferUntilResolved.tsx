@@ -1,6 +1,7 @@
 import useIsMounted from '@cozka/react-utils/useIsMounted';
 import { useEffect, useState } from 'react';
 import { DeferRenderingResult, RenderingState } from '../types';
+import useDeferUntilStateChange from '../useDeferUntilReady';
 import { UseDeferUntilResolvedOptions } from './types';
 
 /**
@@ -13,29 +14,27 @@ export default function useDeferUntilResolved(
   callback: (() => Promise<any>) | null | undefined,
   options: UseDeferUntilResolvedOptions = {},
 ): DeferRenderingResult {
-  const { ...nodes } = options;
   const [state, setState] = useState<RenderingState>(
     callback ? 'pending' : 'ready',
   );
   const isMounted = useIsMounted();
 
   useEffect(() => {
-    callback()
-      .then(() => {
-        if (isMounted()) {
-          setState('ready');
-        }
-      })
-      .catch((err) => {
-        if (isMounted()) {
-          setState('error');
-          console.error(err);
-        }
-      });
-  }, []);
+    if (callback) {
+      setState('pending');
+      callback()
+        .then(() => {
+          if (isMounted()) {
+            setState('ready');
+          }
+        })
+        .catch(() => {
+          if (isMounted()) {
+            setState('error');
+          }
+        });
+    }
+  }, [callback]);
 
-  return {
-    state,
-    node: nodes[state],
-  };
+  return useDeferUntilStateChange(state, options);
 }

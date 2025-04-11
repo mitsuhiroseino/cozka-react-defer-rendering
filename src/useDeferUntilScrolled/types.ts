@@ -1,6 +1,6 @@
-import { DeferRenderingOptionsBase } from '../types';
+import { UseDeferUntilTrueOptions } from '../useDeferUntilTrue';
 
-export type UseDeferUntilScrolledOptions = DeferRenderingOptionsBase & {
+export type UseDeferUntilScrolledOptions = UseDeferUntilTrueOptions & {
   /**
    * 監視するコンテナー
    */

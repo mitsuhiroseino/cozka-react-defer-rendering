@@ -1,3 +1,6 @@
-import { DeferRenderingOptionsBase } from '../types';
+import { useDeferUntilReadyOptions } from '../useDeferUntilReady';
 
-export type UseDeferUntilTrueOptions = DeferRenderingOptionsBase & {};
+export type UseDeferUntilTrueOptions = Omit<
+  useDeferUntilReadyOptions,
+  'error' | 'errorDefer' | 'preserveOnceError'
+>;

@@ -1,3 +1,3 @@
-import { DeferRenderingOptionsBase } from '../types';
+import { UseDeferUntilTrueOptions } from '../useDeferUntilTrue';
 
-export type UseDeferUntilTimeoutOptions = DeferRenderingOptionsBase & {};
+export type UseDeferUntilTimeoutOptions = UseDeferUntilTrueOptions;

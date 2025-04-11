@@ -1,16 +1,6 @@
 import { ReactNode } from 'react';
 
 /**
- * エラーの状態がある場合のオプションのベース
- */
-export type DeferRenderingWithErrorOptionsBase = DeferRenderingOptionsBase & {
-  /**
-   * エラー時に表示するノード
-   */
-  error?: ReactNode;
-};
-
-/**
  * オプションのベース
  */
 export type DeferRenderingOptionsBase = {
@@ -23,6 +13,41 @@ export type DeferRenderingOptionsBase = {
    * 最終的に表示するノード
    */
   ready?: ReactNode;
+
+  /**
+   * エラー時に表示するノード
+   */
+  error?: ReactNode;
+
+  /**
+   * pendingを表示する際の遅延時間（ミリ秒）
+   * 未指定の場合は即表示
+   */
+  pendingDefer?: number;
+
+  /**
+   * readyを表示する際の遅延時間（ミリ秒）
+   * 未指定の場合は即表示
+   */
+  readyDefer?: number;
+
+  /**
+   * errorを表示する際の遅延時間（ミリ秒）
+   * 未指定の場合は即表示
+   */
+  errorDefer?: number;
+
+  /**
+   * 一旦readyになったらready状態を保持するかどうか
+   * trueの場合、ready状態になった後にpending状態に戻すことができない
+   */
+  preserveOnceReady?: boolean;
+
+  /**
+   * 一旦errorになったらerror状態を保持するかどうか
+   * trueの場合、error状態になった後にpending状態に戻すことができない
+   */
+  preserveOnceError?: boolean;
 };
 
 /**
@@ -38,19 +63,19 @@ export type DeferRenderingWithHandlersResult = DeferRenderingResult & {
    * 描画可能な状態になった時に実行するハンドラー
    * @returns
    */
-  onReady?: () => void;
+  onReady: () => void;
 
   /**
    * 描画不可能な状態になった時に実行するハンドラー
    * @returns
    */
-  onError?: () => void;
+  onError: () => void;
 
   /**
    * 描画前の状態に戻すハンドラー
    * @returns
    */
-  onPending?: () => void;
+  onPending: () => void;
 };
 
 /**
