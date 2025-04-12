@@ -1,15 +1,17 @@
 import { debounce } from 'lodash';
-import { useMemo, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import { DeferRenderingWithHandlersResult, RenderingState } from '../types';
 import useDeferUntilStateChange from '../useDeferUntilReady';
 import { UseDeferUntilOnReadyOptions } from './types';
 
 /**
  * 戻り値として返す`onReady`が実行されるまで描画を遅延させるhook
+ * @param target 描画対象のノード
  * @param options オプション
  * @returns state（'pending', 'ready', 'error'）と状態に応じたノードと状態変更用のハンドラー
  */
 export default function useDeferUntilReady(
+  target: ReactNode,
   options: UseDeferUntilOnReadyOptions,
 ): DeferRenderingWithHandlersResult {
   const { onReadyDelay, onErrorDelay, onPendingDelay, ...opts } = options;
@@ -28,9 +30,9 @@ export default function useDeferUntilReady(
   }, [onPendingDelay]);
 
   return {
-    ...useDeferUntilStateChange(state, opts),
-    onReady,
-    onError,
+    ...useDeferUntilStateChange(target, state, opts),
     onPending,
+    onError,
+    onReady,
   };
 }

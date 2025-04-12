@@ -1,16 +1,18 @@
 import useIsMounted from '@cozka/react-utils/useIsMounted';
-import { useEffect, useState } from 'react';
-import { DeferRenderingResult, RenderingState } from '../types';
+import { ReactNode, useEffect, useState } from 'react';
+import { DeferRenderingResult } from '../types';
 import useDeferUntilTrue from '../useDeferUntilTrue';
 import { UseDeferUntilTimeoutOptions } from './types';
 
 /**
  * 指定の時間まで描画を遅延させるhook
+ * @param target 描画対象のノード
  * @param defer 遅延させる時間
  * @param options オプション
  * @returns state（'pending', 'ready'）と状態に応じたノード
  */
 export default function useDeferUntilTimeout(
+  target: ReactNode,
   defer: number | null | undefined,
   options: UseDeferUntilTimeoutOptions = {},
 ): DeferRenderingResult {
@@ -27,5 +29,5 @@ export default function useDeferUntilTimeout(
     }
   }, []);
 
-  return useDeferUntilTrue(condition, options);
+  return useDeferUntilTrue(target, condition, options);
 }

@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { DeferRenderingResult } from '../types';
 import useDeferUntilTrue from '../useDeferUntilTrue';
 import { UseDeferUntilBreakpointOptions } from './types';
 
 /**
  * セレクターに一致するエレメントが描画されるまで描画を遅延させるhook
+ * @param target 描画対象のノード
  * @param query クエリセレクター（例: '.my-class'）
  * @param options オプション
  * @returns state（'pending', 'ready'）と状態に応じたノード
  */
 export default function useDeferUntilBreakpoint(
+  target: ReactNode,
   query: string,
   options: UseDeferUntilBreakpointOptions = {},
 ): DeferRenderingResult {
@@ -37,5 +39,5 @@ export default function useDeferUntilBreakpoint(
     }
   }, [query]);
 
-  return useDeferUntilTrue(condition, { preserveOnceReady, ...opts });
+  return useDeferUntilTrue(target, condition, { preserveOnceReady, ...opts });
 }

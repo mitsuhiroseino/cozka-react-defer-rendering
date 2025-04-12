@@ -1,26 +1,28 @@
 import useIsMounted from '@cozka/react-utils/useIsMounted';
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { DeferRenderingResult, RenderingState } from '../types';
 import { useDeferUntilReadyOptions } from './types';
 
 /**
  * ステートが'ready'になるまで描画を遅延させるhook
+ * @param target 描画対象のノード
+ * @param state ステート（'pending', 'ready', 'error'）
  * @param options オプション
  * @returns state（'pending', 'ready', 'error'）と状態に応じたノード
  */
-export default function useDeferUntilStateChange(
+export default function useDeferUntilReady(
+  target: ReactNode,
   state: RenderingState,
-  options: useDeferUntilReadyOptions,
+  options: useDeferUntilReadyOptions = {},
 ): DeferRenderingResult {
   const {
     pending,
-    ready,
     error,
     pendingDefer,
-    readyDefer,
     errorDefer,
-    preserveOnceReady,
+    readyDefer,
     preserveOnceError,
+    preserveOnceReady,
   } = options;
 
   const latestState = useRef<RenderingState>(null);
@@ -36,8 +38,8 @@ export default function useDeferUntilStateChange(
 
   const { nextNode, defer } = {
     pending: { nextNode: pending, defer: pendingDefer },
-    ready: { nextNode: ready, defer: readyDefer },
     error: { nextNode: error, defer: errorDefer },
+    ready: { nextNode: target, defer: readyDefer },
   }[state];
   const [node, setNode] = useState(() => (defer == null ? nextNode : null));
   const isMounted = useIsMounted();

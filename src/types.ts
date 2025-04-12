@@ -10,11 +10,6 @@ export type DeferRenderingOptionsBase = {
   pending?: ReactNode;
 
   /**
-   * 最終的に表示するノード
-   */
-  ready?: ReactNode;
-
-  /**
    * エラー時に表示するノード
    */
   error?: ReactNode;
@@ -26,44 +21,44 @@ export type DeferRenderingOptionsBase = {
   pendingDefer?: number;
 
   /**
-   * readyを表示する際の遅延時間（ミリ秒）
-   * 未指定の場合は即表示
-   */
-  readyDefer?: number;
-
-  /**
    * errorを表示する際の遅延時間（ミリ秒）
    * 未指定の場合は即表示
    */
   errorDefer?: number;
 
   /**
-   * 一旦readyになったらready状態を保持するかどうか
-   * trueの場合、ready状態になった後にpending状態に戻すことができない
+   * readyを表示する際の遅延時間（ミリ秒）
+   * 未指定の場合は即表示
    */
-  preserveOnceReady?: boolean;
+  readyDefer?: number;
 
   /**
    * 一旦errorになったらerror状態を保持するかどうか
    * trueの場合、error状態になった後にpending状態に戻すことができない
    */
   preserveOnceError?: boolean;
+
+  /**
+   * 一旦readyになったらready状態を保持するかどうか
+   * trueの場合、ready状態になった後にpending状態に戻すことができない
+   */
+  preserveOnceReady?: boolean;
 };
 
 /**
  * 描画に関する状態
  */
-export type RenderingState = 'pending' | 'ready' | 'error';
+export type RenderingState = 'pending' | 'error' | 'ready';
 
 /**
  * 現在の状態と状態変更用のハンドラーを返す戻り値
  */
 export type DeferRenderingWithHandlersResult = DeferRenderingResult & {
   /**
-   * 描画可能な状態になった時に実行するハンドラー
+   * 描画前の状態に戻すハンドラー
    * @returns
    */
-  onReady: () => void;
+  onPending: () => void;
 
   /**
    * 描画不可能な状態になった時に実行するハンドラー
@@ -72,10 +67,10 @@ export type DeferRenderingWithHandlersResult = DeferRenderingResult & {
   onError: () => void;
 
   /**
-   * 描画前の状態に戻すハンドラー
+   * 描画可能な状態になった時に実行するハンドラー
    * @returns
    */
-  onPending: () => void;
+  onReady: () => void;
 };
 
 /**
