@@ -1,6 +1,6 @@
 {
   "name": "@cozka/react-defer-rendering",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "keywords": [
     "react",
     "layout",
@@ -22,7 +22,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@cozka/react-style-proxy": "^0.2.4",
+    "@cozka/react-style-proxy": "^0.2.5",
     "@cozka/react-utils": "^0.3.8",
     "@cozka/utils-css-animations": "^0.1.0",
     "@cozka/utils-function": "^0.1.0",
