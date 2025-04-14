@@ -1432,7 +1432,7 @@ __metadata:
     "@types/lodash": "npm:^4.17.16"
     "@types/lodash-es": "npm:^4.17.12"
     "@types/node": "npm:^20.2.5"
-    "@types/react": "npm:^19"
+    "@types/react": "npm:^17.0.0"
     babel-jest: "npm:^29.7.0"
     clean-css: "npm:^5.3.3"
     eslint: "npm:^9.24.0"
@@ -2811,12 +2811,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^19":
-  version: 19.0.11
-  resolution: "@types/react@npm:19.0.11"
+"@types/prop-types@npm:*":
+  version: 15.7.14
+  resolution: "@types/prop-types@npm:15.7.14"
+  checksum: 10c0/1ec775160bfab90b67a782d735952158c7e702ca4502968aa82565bd8e452c2de8601c8dfe349733073c31179116cf7340710160d3836aa8a1ef76d1532893b1
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^17.0.0":
+  version: 17.0.85
+  resolution: "@types/react@npm:17.0.85"
   dependencies:
+    "@types/prop-types": "npm:*"
+    "@types/scheduler": "npm:^0.16"
     csstype: "npm:^3.0.2"
-  checksum: 10c0/386cdde579b60e22160d6894a985655742703346bdc71fed9809f8f90ca87e2dd0252e86b81f92621a2c1de8d0fbf35e3963996db8c451cc670570061ed62f29
+  checksum: 10c0/543e7c1a746e6cabd09b231be2040f8d228c3c25c67832bba536f03cb614d68495328d547b0e6f78d92cdc3b32c0560bdb39235c3bd100a141cb5a7a482f10ba
   languageName: node
   linkType: hard
 
@@ -2824,6 +2833,13 @@ __metadata:
   version: 1.20.2
   resolution: "@types/resolve@npm:1.20.2"
   checksum: 10c0/c5b7e1770feb5ccfb6802f6ad82a7b0d50874c99331e0c9b259e415e55a38d7a86ad0901c57665d93f75938be2a6a0bc9aa06c9749192cadb2e4512800bbc6e6
+  languageName: node
+  linkType: hard
+
+"@types/scheduler@npm:^0.16":
+  version: 0.16.8
+  resolution: "@types/scheduler@npm:0.16.8"
+  checksum: 10c0/f86de504945b8fc41b1f391f847444d542e2e4067cf7e5d9bfeb5d2d2393d3203b1161bc0ef3b1e104d828dabfb60baf06e8d2c27e27ff7e8258e6e618d8c4ec
   languageName: node
   linkType: hard
 

@@ -48,7 +48,7 @@
     "@types/lodash": "^4.17.16",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.2.5",
-    "@types/react": "^19",
+    "@types/react": "^17.0.0",
     "babel-jest": "^29.7.0",
     "clean-css": "^5.3.3",
     "eslint": "^9.24.0",
