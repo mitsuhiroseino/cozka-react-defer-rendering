@@ -64,6 +64,6 @@ export default function useDeferUntilReady(
 
   return {
     state,
-    node,
+    node: node ?? <></>,
   };
 }

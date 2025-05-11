@@ -17,7 +17,7 @@ export default function useDeferUntilScrolled(
   options: UseDeferUntilScrolledOptions = {},
 ): DeferRenderingResult {
   const {
-    container = window,
+    container = document.documentElement,
     detectionDelay = 100,
     preserveOnceReady,
     ...opts
@@ -25,16 +25,10 @@ export default function useDeferUntilScrolled(
   const [condition, setCondition] = useState(false);
 
   useEffect(() => {
-    const isWindow = container === window;
     const checkScroll = () => {
       if (element) {
-        const containerElement = isWindow
-          ? document.documentElement
-          : container;
         const rect = element.getBoundingClientRect();
-        const height = isWindow ? 'innerHeight' : 'clientHeight';
-        const isVisible =
-          rect.top < containerElement[height] && rect.bottom >= 0;
+        const isVisible = rect.top < container.clientHeight && rect.bottom >= 0;
 
         return isVisible;
       } else {
@@ -48,21 +42,19 @@ export default function useDeferUntilScrolled(
       return;
     }
 
+    // スクロールイベントリスナーの追加
     const debouncedHandleScroll = debounce(() => {
       const isVisible = checkScroll();
       setCondition(isVisible);
       if (preserveOnceReady) {
-        observedTarget.removeEventListener('scroll', debouncedHandleScroll);
+        container.removeEventListener('scroll', debouncedHandleScroll);
       }
     }, detectionDelay);
-
-    // スクロールイベントリスナーの追加
-    const observedTarget = isWindow ? window : container;
-    observedTarget.addEventListener('scroll', debouncedHandleScroll);
+    container.addEventListener('scroll', debouncedHandleScroll);
 
     // クリーンアップ
     return () => {
-      observedTarget.removeEventListener('scroll', debouncedHandleScroll);
+      container.removeEventListener('scroll', debouncedHandleScroll);
     };
   }, [element, container]);
 
