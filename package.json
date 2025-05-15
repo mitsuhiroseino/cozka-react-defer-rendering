@@ -14,7 +14,7 @@
   "author": "Mitsuhiro Seino",
   "type": "module",
   "scripts": {
-    "build": "tsc -b && vite build",
+    "build": "rimraf dist && tsc -b && vite build && vite build --mode cjs",
     "build-storybook": "storybook build",
     "dev": "vite",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\"",
@@ -88,7 +88,7 @@
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "rimraf": "^3.0.2",
-    "rollup": "^4.39.0",
+    "rollup": "^4.40.1",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-sass": "^1.15.2",
     "storybook": "8.6.12",
