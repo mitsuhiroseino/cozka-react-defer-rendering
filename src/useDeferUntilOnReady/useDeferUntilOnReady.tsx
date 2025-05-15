@@ -1,4 +1,4 @@
-import { debounce } from 'lodash';
+import debounce from 'lodash-es/debounce';
 import { ReactNode, useMemo, useState } from 'react';
 import { DeferRenderingWithHandlersResult, RenderingState } from '../types';
 import useDeferUntilStateChange from '../useDeferUntilReady';

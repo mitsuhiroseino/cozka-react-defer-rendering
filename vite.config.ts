@@ -1,19 +1,22 @@
 import packagejson from '@cozka/rollup-create-dist-packagejson';
 import react from '@vitejs/plugin-react-swc';
+import fs from 'fs-extra';
 import path from 'path';
 import copy from 'rollup-plugin-copy';
 import { defineConfig } from 'vite';
 
 const INPUT = './src/index.ts';
-const EXTENTIONS = ['.ts', '.tsx', '.js', '.jsx'];
 const EXTENTION_ESM = '.js';
 const EXTENTION_CJS = '.cjs';
-// node_modules配下のdependenciesはバンドルしない。下記の正規表現の指定をするためには'@rollup/plugin-node-resolve'が必要
-const EXTERNAL = [/[\\/]node_modules[\\/]/, /[\\/]dist[\\/]/];
 const OUTPUT = './dist';
 const OUTPUT_ESM = OUTPUT;
 const OUTPUT_CJS_DIR = 'cjs';
 const OUTPUT_CJS = path.join(OUTPUT, OUTPUT_CJS_DIR);
+const pakcageJson = fs.readJsonSync('./package.json');
+const EXTERNAL = Object.keys({
+  ...pakcageJson.dependencies,
+  ...pakcageJson.peerDependencies,
+});
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -22,16 +25,16 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     build: {
       lib: {
-        entry: 'src/index.ts',
-        name: 'index',
-        fileName: 'index',
+        entry: INPUT,
         formats: [isCjs ? 'cjs' : 'es'],
       },
       cssCodeSplit: true,
       sourcemap: false,
       emptyOutDir: false,
+      minify: false,
       rollupOptions: {
-        external: EXTERNAL,
+        external: (id) =>
+          EXTERNAL.some((pkg) => id === pkg || id.startsWith(pkg + '/')),
         output: {
           dir: isCjs ? OUTPUT_CJS : OUTPUT_ESM,
           format: isCjs ? 'cjs' : 'es',
@@ -41,6 +44,7 @@ export default defineConfig(({ mode }) => {
           preserveModules: true,
           interop: 'auto',
         },
+        treeshake: false,
         plugins: isCjs
           ? []
           : ([

@@ -11,6 +11,7 @@
     "declaration": true,
     "declarationDir": "dist",
     "declarationMap": false,
+    "emitDeclarationOnly": true,
     "sourceMap": false,
     "inlineSources": false,
     "removeComments": false,
