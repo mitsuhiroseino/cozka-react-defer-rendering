@@ -1,7 +1,7 @@
 import debounce from 'lodash-es/debounce';
 import { ReactNode, useMemo, useState } from 'react';
 import { DeferRenderingWithHandlersResult, RenderingState } from '../types';
-import useDeferUntilStateChange from '../useDeferUntilReady';
+import useDeferUntilReady from '../useDeferUntilReady';
 import { UseDeferUntilOnReadyOptions } from './types';
 
 /**
@@ -10,10 +10,10 @@ import { UseDeferUntilOnReadyOptions } from './types';
  * @param options オプション
  * @returns state（'pending', 'ready', 'error'）と状態に応じたノードと状態変更用のハンドラー
  */
-export default function useDeferUntilReady(
-  target: ReactNode,
-  options: UseDeferUntilOnReadyOptions,
-): DeferRenderingWithHandlersResult {
+export default function useDeferUntilOnReady<T extends ReactNode, P, E>(
+  target: T,
+  options: UseDeferUntilOnReadyOptions<P, E>,
+): DeferRenderingWithHandlersResult<T | P | E> {
   const { onReadyDelay, onErrorDelay, onPendingDelay, ...opts } = options;
   const [state, setState] = useState<RenderingState>('pending');
   const onReady = useMemo(() => {
@@ -30,7 +30,7 @@ export default function useDeferUntilReady(
   }, [onPendingDelay]);
 
   return {
-    ...useDeferUntilStateChange(target, state, opts),
+    ...useDeferUntilReady(target, state, opts),
     onPending,
     onError,
     onReady,

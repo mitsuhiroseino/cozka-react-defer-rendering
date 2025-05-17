@@ -1,6 +1,5 @@
-import { useDeferUntilReadyOptions } from '../useDeferUntilReady';
+import { ReactNode } from 'react';
+import { DeferRenderingOptionsBase } from '../types';
 
-export type UseDeferUntilTrueOptions = Omit<
-  useDeferUntilReadyOptions,
-  'error' | 'errorDefer' | 'preserveOnceError'
->;
+export type UseDeferUntilTrueOptions<P extends ReactNode = ReactNode> =
+  DeferRenderingOptionsBase<P>;

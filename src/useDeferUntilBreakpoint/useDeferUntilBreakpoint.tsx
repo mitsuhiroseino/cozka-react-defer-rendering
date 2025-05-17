@@ -12,11 +12,11 @@ import { UseDeferUntilBreakpointOptions } from './types';
  * @param options オプション
  * @returns state（'pending', 'ready'）と状態に応じたノード
  */
-export default function useDeferUntilBreakpoint(
-  target: ReactNode,
+export default function useDeferUntilBreakpoint<T extends ReactNode, P>(
+  target: T,
   mediaQuery: string,
-  options: UseDeferUntilBreakpointOptions = {},
-): DeferRenderingResult {
+  options: UseDeferUntilBreakpointOptions<P> = {},
+): DeferRenderingResult<T | P> {
   const { detectionDelay = 100, preserveOnceReady, ...opts } = options;
   const [condition, setCondition] = useState(false);
 

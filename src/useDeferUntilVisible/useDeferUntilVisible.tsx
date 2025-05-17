@@ -11,11 +11,11 @@ import { UseDeferUntilVisibleOptions } from './types';
  * @param options オプション
  * @returns state（'pending', 'ready'）と状態に応じたノード
  */
-export default function useDeferUntilVisible(
-  target: ReactNode,
+export default function useDeferUntilVisible<T extends ReactNode, P>(
+  target: T,
   element: HTMLElement | null | undefined,
-  options: UseDeferUntilVisibleOptions = {},
-): DeferRenderingResult {
+  options: UseDeferUntilVisibleOptions<P> = {},
+): DeferRenderingResult<T | P> {
   const { container = null, threshold = 0.1, ...opts } = options;
   const [condition, setCondition] = useState(false);
   const isMounted = useIsMounted();

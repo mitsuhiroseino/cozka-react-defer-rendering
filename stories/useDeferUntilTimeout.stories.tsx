@@ -1,22 +1,24 @@
 import type { ArgTypes, Meta, StoryObj } from '@storybook/react';
-import React, { forwardRef } from 'react';
+import { FC } from 'react';
 import useDeferUntilTimeout, {
   UseDeferUntilTimeoutOptions,
 } from '../src/useDeferUntilTimeout';
+import { baseArgTypes } from './argTypes';
 
 type ComponentProps = UseDeferUntilTimeoutOptions & {
   defer?: number | null | undefined;
 };
 
-const Component = forwardRef<HTMLDivElement, ComponentProps>((props, ref) => {
-  const { defer = 4000, ...options } = props;
-  const { node, state } = useDeferUntilTimeout(
-    <div ref={ref}>OK</div>,
-    defer,
-    options,
-  );
-  return node as any;
-});
+const Component: FC<ComponentProps> = (props) => {
+  const { defer = 2000, pending, ...options } = props;
+  const { node, state } = useDeferUntilTimeout(<>OK</>, defer, {
+    pending: <>{pending}</>,
+    ...options,
+  });
+  return node;
+};
+
+const argTypes: ArgTypes<ComponentProps> = baseArgTypes;
 
 const meta = {
   title: 'useDeferUntilTimeout',
@@ -27,5 +29,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  argTypes,
   args: {},
+};
+
+export const Pending: Story = {
+  argTypes,
+  args: {
+    pending: 'Pending...',
+  },
 };

@@ -11,11 +11,11 @@ import { UseDeferUntilTimeoutOptions } from './types';
  * @param options オプション
  * @returns state（'pending', 'ready'）と状態に応じたノード
  */
-export default function useDeferUntilTimeout(
-  target: ReactNode,
+export default function useDeferUntilTimeout<T extends ReactNode, P>(
+  target: T,
   defer: number | null | undefined,
-  options: UseDeferUntilTimeoutOptions = {},
-): DeferRenderingResult {
+  options: UseDeferUntilTimeoutOptions<P> = {},
+): DeferRenderingResult<T | P> {
   const [condition, setCondition] = useState(!defer);
   const isMounted = useIsMounted();
 

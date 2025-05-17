@@ -1,5 +1,6 @@
 export type * from './types';
 export { default as useDeferUntilBreakpoint } from './useDeferUntilBreakpoint';
+export { default as useDeferUntilChange } from './useDeferUntilChange';
 export { default as useDeferUntilFontReady } from './useDeferUntilFontReady';
 export { default as useDeferUntilOnReady } from './useDeferUntilOnReady';
 export { default as useDeferUntilReady } from './useDeferUntilReady';

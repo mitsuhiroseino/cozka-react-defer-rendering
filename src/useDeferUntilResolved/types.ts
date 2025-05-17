@@ -1,3 +1,7 @@
+import { ReactNode } from 'react';
 import { useDeferUntilReadyOptions } from '../useDeferUntilReady';
 
-export type UseDeferUntilResolvedOptions = useDeferUntilReadyOptions;
+export type UseDeferUntilResolvedOptions<
+  P extends ReactNode = ReactNode,
+  E extends ReactNode = ReactNode,
+> = useDeferUntilReadyOptions<P, E>;

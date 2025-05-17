@@ -12,11 +12,11 @@ import { UseDeferUntilFontReadyOptions } from './types';
  * @param options オプション
  * @returns state（'pending', 'ready', 'error'）と状態に応じたノード
  */
-export default function useDeferUntilFontReady(
-  target: ReactNode,
+export default function useDeferUntilFontReady<T extends ReactNode, P, E>(
+  target: T,
   fontFamily: string | null | undefined,
-  options: UseDeferUntilFontReadyOptions,
-): DeferRenderingResult {
+  options: UseDeferUntilFontReadyOptions<P, E>,
+): DeferRenderingResult<T | P | E> {
   const { fontVariant, timeout = 4000, loader, ...opts } = options;
   const [state, setState] = useState<RenderingState>('pending');
   const isMounted = useIsMounted();

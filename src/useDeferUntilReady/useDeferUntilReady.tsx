@@ -10,11 +10,11 @@ import { useDeferUntilReadyOptions } from './types';
  * @param options オプション
  * @returns state（'pending', 'ready', 'error'）と状態に応じたノード
  */
-export default function useDeferUntilReady(
-  target: ReactNode,
+export default function useDeferUntilReady<T extends ReactNode, P, E>(
+  target: T,
   state: RenderingState,
-  options: useDeferUntilReadyOptions = {},
-): DeferRenderingResult {
+  options: useDeferUntilReadyOptions<P, E> = {},
+): DeferRenderingResult<T | P | E> {
   const {
     pending,
     error,
@@ -64,6 +64,6 @@ export default function useDeferUntilReady(
 
   return {
     state,
-    node: node ?? <></>,
+    node,
   };
 }

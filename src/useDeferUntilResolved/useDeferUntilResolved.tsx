@@ -1,7 +1,7 @@
 import useIsMounted from '@cozka/react-utils/useIsMounted';
 import { ReactNode, useEffect, useState } from 'react';
 import { DeferRenderingResult, RenderingState } from '../types';
-import useDeferUntilStateChange from '../useDeferUntilReady';
+import useDeferUntilReady from '../useDeferUntilReady';
 import { UseDeferUntilResolvedOptions } from './types';
 
 /**
@@ -11,11 +11,11 @@ import { UseDeferUntilResolvedOptions } from './types';
  * @param options オプション
  * @returns state（'pending', 'ready', 'error'）と状態に応じたノード
  */
-export default function useDeferUntilResolved(
-  target: ReactNode,
+export default function useDeferUntilResolved<T extends ReactNode, P, E>(
+  target: T,
   callback: (() => Promise<void>) | null | undefined,
-  options: UseDeferUntilResolvedOptions = {},
-): DeferRenderingResult {
+  options: UseDeferUntilResolvedOptions<P, E> = {},
+): DeferRenderingResult<T | P | E> {
   const [state, setState] = useState<RenderingState>(
     callback ? 'pending' : 'ready',
   );
@@ -38,5 +38,5 @@ export default function useDeferUntilResolved(
     }
   }, [callback]);
 
-  return useDeferUntilStateChange(target, state, options);
+  return useDeferUntilReady(target, state, options);
 }

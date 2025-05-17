@@ -11,11 +11,11 @@ import { UseDeferUntilScrolledOptions } from './types';
  * @param options オプション
  * @returns state（'pending', 'ready'）と状態に応じたノード
  */
-export default function useDeferUntilScrolled(
-  target: ReactNode,
+export default function useDeferUntilScrolled<T extends ReactNode, P>(
+  target: T,
   element: HTMLElement | null | undefined,
-  options: UseDeferUntilScrolledOptions = {},
-): DeferRenderingResult {
+  options: UseDeferUntilScrolledOptions<P> = {},
+): DeferRenderingResult<T | P> {
   const {
     container = document.documentElement,
     detectionDelay = 100,
