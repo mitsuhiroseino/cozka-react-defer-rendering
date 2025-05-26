@@ -1,3 +1,4 @@
+import { useIsMounted } from '@cozka/react-utils';
 import { ReactNode, useEffect, useState } from 'react';
 import { DeferRenderingResult } from '../types';
 import useDeferUntilTrue from '../useDeferUntilTrue';
@@ -17,19 +18,24 @@ export default function useDeferUntilRender<T extends ReactNode, P>(
 ): DeferRenderingResult<T | P> {
   const { interval = 400, preserveOnceReady, ...opts } = options;
   const [condition, setCondition] = useState(false);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (query) {
       const intervalId = setInterval(() => {
         const element = document.querySelector(query);
         if (element) {
-          setCondition(true);
+          if (isMounted()) {
+            setCondition(true);
+          }
           if (preserveOnceReady) {
             // 一度readyになったらready状態を保持する場合はintervalをクリアする
             clearInterval(intervalId);
           }
         } else {
-          setCondition(false);
+          if (isMounted()) {
+            setCondition(false);
+          }
         }
       }, interval);
 

@@ -66,6 +66,7 @@ export default defineConfig(({ mode }) => {
                       require: `./${OUTPUT_CJS_DIR}/*/index.cjs`,
                     },
                   },
+                  files: ['**/*'],
                 },
               }),
               copy({

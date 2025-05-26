@@ -12,9 +12,9 @@ const Component: FC<ComponentProps> = (props) => {
   const { pending, ...options } = props;
   const elementRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { node, state } = useDeferUntilScrolled(<>OK</>, elementRef.current, {
+  const { node, state } = useDeferUntilScrolled(<>OK</>, elementRef, {
     pending: <>{pending}</>,
-    container: containerRef.current,
+    containerRef,
     ...options,
   });
 

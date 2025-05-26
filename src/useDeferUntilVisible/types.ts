@@ -1,13 +1,13 @@
-import { ReactNode } from 'react';
+import { ReactNode, RefObject } from 'react';
 import { UseDeferUntilTrueOptions } from '../useDeferUntilTrue';
 
 export type UseDeferUntilVisibleOptions<P extends ReactNode = ReactNode> =
   UseDeferUntilTrueOptions<P> & {
     /**
-     * 監視するコンテナー
+     * 監視するコンテナーの参照
      * デフォルトはnull（ビューポート）
      */
-    container?: Element | null | undefined;
+    containerRef?: RefObject<Element | null | undefined>;
 
     /**
      * ビューポートに基準となる要素がどの程度の割合入ったら描画するか(0～1)

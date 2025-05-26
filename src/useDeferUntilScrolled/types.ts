@@ -1,12 +1,12 @@
-import { ReactNode } from 'react';
+import { ReactNode, RefObject } from 'react';
 import { UseDeferUntilTrueOptions } from '../useDeferUntilTrue';
 
 export type UseDeferUntilScrolledOptions<P extends ReactNode = ReactNode> =
   UseDeferUntilTrueOptions<P> & {
     /**
-     * 監視するコンテナー
+     * 監視するコンテナーの参照
      */
-    container?: Element | null | undefined;
+    containerRef?: RefObject<Element | null | undefined>;
 
     /**
      * スクロールイベントのデバウンス時間（ミリ秒）

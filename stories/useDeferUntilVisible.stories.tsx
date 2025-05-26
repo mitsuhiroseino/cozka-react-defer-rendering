@@ -1,5 +1,5 @@
 import type { ArgTypes, Meta, StoryObj } from '@storybook/react';
-import { FC, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import useDeferUntilVisible, {
   UseDeferUntilVisibleOptions,
 } from '../src/useDeferUntilVisible';
@@ -11,9 +11,9 @@ const Component: FC<ComponentProps> = (props) => {
   const { pending, ...options } = props;
   const elementRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { node, state } = useDeferUntilVisible(<>OK</>, elementRef.current, {
+  const { node, state } = useDeferUntilVisible(<>OK</>, elementRef, {
     pending: <>{pending}</>,
-    container: containerRef.current,
+    containerRef,
     ...options,
   });
 

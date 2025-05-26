@@ -29,7 +29,5 @@ export default function useDeferUntilChange<T extends ReactNode, P>(
     }
   }, [value]);
 
-  console.log(result);
-
   return result;
 }

@@ -1,5 +1,6 @@
+import { useIsMounted } from '@cozka/react-utils';
 import debounce from 'lodash-es/debounce';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, RefObject, useEffect, useRef, useState } from 'react';
 import { DeferRenderingResult } from '../types';
 import useDeferUntilTrue from '../useDeferUntilTrue';
 import { UseDeferUntilScrolledOptions } from './types';
@@ -7,24 +8,30 @@ import { UseDeferUntilScrolledOptions } from './types';
 /**
  * スクロール位置に基づいて描画を遅延させるhook
  * @param target 描画対象のノード
- * @param element 基準となる要素
+ * @param elementRef 基準となる要素の参照
  * @param options オプション
  * @returns state（'pending', 'ready'）と状態に応じたノード
  */
 export default function useDeferUntilScrolled<T extends ReactNode, P>(
   target: T,
-  element: HTMLElement | null | undefined,
+  elementRef: RefObject<HTMLElement | null | undefined>,
   options: UseDeferUntilScrolledOptions<P> = {},
 ): DeferRenderingResult<T | P> {
+  const defaultContainerRef = useRef<Element | null | undefined>(
+    document.documentElement,
+  );
   const {
-    container = document.documentElement,
+    containerRef = defaultContainerRef,
     detectionDelay = 100,
     preserveOnceReady,
     ...opts
   } = options;
   const [condition, setCondition] = useState(false);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
+    const element = elementRef.current;
+    const container = containerRef.current;
     if (element && container) {
       const checkScroll = () => {
         const rect = element.getBoundingClientRect();
@@ -42,7 +49,9 @@ export default function useDeferUntilScrolled<T extends ReactNode, P>(
       // スクロールイベントリスナーの追加
       const debouncedHandleScroll = debounce(() => {
         const isVisible = checkScroll();
-        setCondition(isVisible);
+        if (isMounted()) {
+          setCondition(isVisible);
+        }
         if (preserveOnceReady) {
           container.removeEventListener('scroll', debouncedHandleScroll);
         }
@@ -54,7 +63,7 @@ export default function useDeferUntilScrolled<T extends ReactNode, P>(
         container.removeEventListener('scroll', debouncedHandleScroll);
       };
     }
-  }, [element, container]);
+  }, [elementRef.current, containerRef.current]);
 
   return useDeferUntilTrue(target, condition, { preserveOnceReady, ...opts });
 }
