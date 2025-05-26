@@ -1,7 +1,7 @@
 import useIsMounted from '@cozka/react-utils/useIsMounted';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { DeferRenderingResult, RenderingState } from '../types';
-import { useDeferUntilReadyOptions } from './types';
+import { UseDeferUntilReadyOptions } from './types';
 
 /**
  * ステートが'ready'になるまで描画を遅延させるhook
@@ -13,7 +13,7 @@ import { useDeferUntilReadyOptions } from './types';
 export default function useDeferUntilReady<T extends ReactNode, P, E>(
   target: T,
   state: RenderingState,
-  options: useDeferUntilReadyOptions<P, E> = {},
+  options: UseDeferUntilReadyOptions<P, E> = {},
 ): DeferRenderingResult<T | P | E> {
   const {
     pending,
@@ -27,20 +27,21 @@ export default function useDeferUntilReady<T extends ReactNode, P, E>(
 
   const latestState = useRef<RenderingState>(null);
   const latest = latestState.current;
+  let current = state;
   if (preserveOnceReady && latest === 'ready') {
     // 一度readyになったらready状態を保持する
-    state = latest;
+    current = latest;
   } else if (preserveOnceError && latest === 'error') {
     // 一度errorになったらerror状態を保持する
-    state = latest;
+    current = latest;
   }
-  latestState.current = state;
+  latestState.current = current;
 
   const { nextNode, defer } = {
     pending: { nextNode: pending, defer: pendingDefer },
     error: { nextNode: error, defer: errorDefer },
     ready: { nextNode: target, defer: readyDefer },
-  }[state];
+  }[current];
   const [node, setNode] = useState(() => (defer == null ? nextNode : null));
   const isMounted = useIsMounted();
 
@@ -60,10 +61,10 @@ export default function useDeferUntilReady<T extends ReactNode, P, E>(
         clearTimeout(timeoutId);
       };
     }
-  }, [state]);
+  }, [current]);
 
   return {
-    state,
+    state: current,
     node,
   };
 }

@@ -1,17 +1,17 @@
 import type { ArgTypes, Meta, StoryObj } from '@storybook/react';
-import { FC } from 'react';
-import useDeferUntilTrue, {
-  UseDeferUntilTrueOptions,
-} from '../src/useDeferUntilTrue';
+import { FC, forwardRef } from 'react';
+import useDeferUntilBreakpoint, {
+  UseDeferUntilBreakpointOptions,
+} from '../src/useDeferUntilBreakpoint';
 import { baseArgTypes } from './argTypes';
 
-type ComponentProps = UseDeferUntilTrueOptions & {
-  value?: boolean;
+type ComponentProps = UseDeferUntilBreakpointOptions & {
+  value: string;
 };
 
 const Component: FC<ComponentProps> = (props) => {
   const { value, pending, ...options } = props;
-  const { node, state } = useDeferUntilTrue(<>OK</>, value, {
+  const { node, state } = useDeferUntilBreakpoint(<>OK</>, value, {
     pending: <>{pending}</>,
     ...options,
   });
@@ -21,7 +21,7 @@ const Component: FC<ComponentProps> = (props) => {
 const argTypes: ArgTypes<ComponentProps> = {
   value: {
     control: {
-      type: 'boolean',
+      type: 'text',
     },
     description: '値',
   },
@@ -29,7 +29,7 @@ const argTypes: ArgTypes<ComponentProps> = {
 };
 
 const meta = {
-  title: 'useDeferUntilTrue',
+  title: 'useDeferUntilBreakpoint',
   component: Component,
 } satisfies Meta<typeof Component>;
 
@@ -39,7 +39,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   argTypes,
   args: {
-    value: false,
+    value: '(orientation: portrait)',
     readyDefer: 1000,
   },
 };
@@ -47,7 +47,7 @@ export const Default: Story = {
 export const Pending: Story = {
   argTypes,
   args: {
-    value: false,
+    value: '(orientation: portrait)',
     pending: 'Pending...',
     readyDefer: 1000,
   },
@@ -56,7 +56,7 @@ export const Pending: Story = {
 export const PreserveOnceReady: Story = {
   argTypes,
   args: {
-    value: false,
+    value: '(orientation: portrait)',
     preserveOnceReady: true,
     readyDefer: 1000,
   },

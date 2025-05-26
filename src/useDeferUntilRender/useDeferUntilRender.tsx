@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { DeferRenderingResult } from '../types';
 import useDeferUntilTrue from '../useDeferUntilTrue';
-import { UseDeferUntilBreakpointOptions } from './types';
+import { UseDeferUntilRenderOptions } from './types';
 
 /**
  * セレクターに一致するエレメントが描画されるまで描画を遅延させるhook
@@ -13,7 +13,7 @@ import { UseDeferUntilBreakpointOptions } from './types';
 export default function useDeferUntilRender<T extends ReactNode, P>(
   target: T,
   query: string,
-  options: UseDeferUntilBreakpointOptions<P> = {},
+  options: UseDeferUntilRenderOptions<P> = {},
 ): DeferRenderingResult<T | P> {
   const { interval = 400, preserveOnceReady, ...opts } = options;
   const [condition, setCondition] = useState(false);

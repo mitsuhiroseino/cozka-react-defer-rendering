@@ -59,6 +59,21 @@ export type DeferRenderingWithErrorOptionsBase<
 export type RenderingState = 'pending' | 'error' | 'ready';
 
 /**
+ * 現在の状態を示す戻り値
+ */
+export type DeferRenderingResult<N extends ReactNode> = {
+  /**
+   * 描画状態
+   */
+  state: RenderingState;
+
+  /**
+   * 描画するノード
+   */
+  node: N;
+};
+
+/**
  * 現在の状態と状態変更用のハンドラーを返す戻り値
  */
 export type DeferRenderingWithHandlersResult<N extends ReactNode> =
@@ -81,18 +96,3 @@ export type DeferRenderingWithHandlersResult<N extends ReactNode> =
      */
     onReady: () => void;
   };
-
-/**
- * 現在の状態を示す戻り値
- */
-export type DeferRenderingResult<N extends ReactNode> = {
-  /**
-   * 描画状態
-   */
-  state: RenderingState;
-
-  /**
-   * 描画するノード
-   */
-  node: N;
-};

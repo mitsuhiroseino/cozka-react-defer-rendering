@@ -19,6 +19,7 @@ export default function useDeferUntilBreakpoint<T extends ReactNode, P>(
 ): DeferRenderingResult<T | P> {
   const { detectionDelay = 100, preserveOnceReady, ...opts } = options;
   const [condition, setCondition] = useState(false);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     const mediaQueryList = window.matchMedia(mediaQuery);
@@ -33,7 +34,7 @@ export default function useDeferUntilBreakpoint<T extends ReactNode, P>(
 
     // メディアクエリの変更を監視
     const handleChange = debounce((event: MediaQueryListEvent) => {
-      if (useIsMounted()) {
+      if (isMounted()) {
         const matches = event.matches;
         setCondition(matches);
         if (preserveOnceReady && matches) {

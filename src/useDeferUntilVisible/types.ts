@@ -7,7 +7,7 @@ export type UseDeferUntilVisibleOptions<P extends ReactNode = ReactNode> =
      * 監視するコンテナー
      * デフォルトはnull（ビューポート）
      */
-    container?: Element;
+    container?: Element | null | undefined;
 
     /**
      * ビューポートに基準となる要素がどの程度の割合入ったら描画するか(0～1)

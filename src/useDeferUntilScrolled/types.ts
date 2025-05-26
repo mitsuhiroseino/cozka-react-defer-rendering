@@ -6,7 +6,7 @@ export type UseDeferUntilScrolledOptions<P extends ReactNode = ReactNode> =
     /**
      * 監視するコンテナー
      */
-    container?: Element;
+    container?: Element | null | undefined;
 
     /**
      * スクロールイベントのデバウンス時間（ミリ秒）

@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { useDeferUntilReadyOptions } from '../useDeferUntilReady';
+import { UseDeferUntilReadyOptions } from '../useDeferUntilReady';
 
 export type UseDeferUntilOnReadyOptions<
   P extends ReactNode = ReactNode,
   E extends ReactNode = ReactNode,
-> = useDeferUntilReadyOptions<P, E> & {
+> = UseDeferUntilReadyOptions<P, E> & {
   /**
    * onReadyのデバウンス時間（ミリ秒）
    * 未指定の場合は即時処理

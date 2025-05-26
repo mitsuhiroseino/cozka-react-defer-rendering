@@ -25,37 +25,35 @@ export default function useDeferUntilScrolled<T extends ReactNode, P>(
   const [condition, setCondition] = useState(false);
 
   useEffect(() => {
-    const checkScroll = () => {
-      if (element) {
+    if (element && container) {
+      const checkScroll = () => {
         const rect = element.getBoundingClientRect();
         const isVisible = rect.top < container.clientHeight && rect.bottom >= 0;
 
         return isVisible;
-      } else {
-        return false;
+      };
+
+      // 初期チェック
+      if (checkScroll()) {
+        setCondition(true);
+        return;
       }
-    };
 
-    // 初期チェック
-    if (checkScroll()) {
-      setCondition(true);
-      return;
-    }
+      // スクロールイベントリスナーの追加
+      const debouncedHandleScroll = debounce(() => {
+        const isVisible = checkScroll();
+        setCondition(isVisible);
+        if (preserveOnceReady) {
+          container.removeEventListener('scroll', debouncedHandleScroll);
+        }
+      }, detectionDelay);
+      container.addEventListener('scroll', debouncedHandleScroll);
 
-    // スクロールイベントリスナーの追加
-    const debouncedHandleScroll = debounce(() => {
-      const isVisible = checkScroll();
-      setCondition(isVisible);
-      if (preserveOnceReady) {
+      // クリーンアップ
+      return () => {
         container.removeEventListener('scroll', debouncedHandleScroll);
-      }
-    }, detectionDelay);
-    container.addEventListener('scroll', debouncedHandleScroll);
-
-    // クリーンアップ
-    return () => {
-      container.removeEventListener('scroll', debouncedHandleScroll);
-    };
+      };
+    }
   }, [element, container]);
 
   return useDeferUntilTrue(target, condition, { preserveOnceReady, ...opts });

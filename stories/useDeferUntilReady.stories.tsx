@@ -1,18 +1,20 @@
 import type { ArgTypes, Meta, StoryObj } from '@storybook/react';
 import { FC } from 'react';
-import useDeferUntilTrue, {
-  UseDeferUntilTrueOptions,
-} from '../src/useDeferUntilTrue';
+import { RenderingState } from '../src/types';
+import useDeferUntilReady, {
+  UseDeferUntilReadyOptions,
+} from '../src/useDeferUntilReady';
 import { baseArgTypes } from './argTypes';
 
-type ComponentProps = UseDeferUntilTrueOptions & {
-  value?: boolean;
+type ComponentProps = UseDeferUntilReadyOptions & {
+  value: RenderingState;
 };
 
 const Component: FC<ComponentProps> = (props) => {
-  const { value, pending, ...options } = props;
-  const { node, state } = useDeferUntilTrue(<>OK</>, value, {
+  const { value, pending, error, ...options } = props;
+  const { node, state } = useDeferUntilReady(<>OK</>, value, {
     pending: <>{pending}</>,
+    error: <>{error}</>,
     ...options,
   });
   return node;
@@ -21,15 +23,16 @@ const Component: FC<ComponentProps> = (props) => {
 const argTypes: ArgTypes<ComponentProps> = {
   value: {
     control: {
-      type: 'boolean',
+      type: 'select',
     },
+    options: ['pending', 'error', 'ready'],
     description: '値',
   },
   ...baseArgTypes,
 };
 
 const meta = {
-  title: 'useDeferUntilTrue',
+  title: 'useDeferUntilReady',
   component: Component,
 } satisfies Meta<typeof Component>;
 
@@ -39,7 +42,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   argTypes,
   args: {
-    value: false,
+    value: 'pending',
     readyDefer: 1000,
   },
 };
@@ -47,17 +50,33 @@ export const Default: Story = {
 export const Pending: Story = {
   argTypes,
   args: {
-    value: false,
+    value: 'pending',
     pending: 'Pending...',
+    error: 'Error!',
+    pendingDefer: 1000,
     readyDefer: 1000,
+    errorDefer: 1000,
   },
 };
 
 export const PreserveOnceReady: Story = {
   argTypes,
   args: {
-    value: false,
+    value: 'pending',
     preserveOnceReady: true,
+    pending: 'Pending...',
+    error: 'Error!',
+    readyDefer: 1000,
+  },
+};
+
+export const PreserveOnceError: Story = {
+  argTypes,
+  args: {
+    value: 'pending',
+    preserveOnceError: true,
+    pending: 'Pending...',
+    error: 'Error!',
     readyDefer: 1000,
   },
 };

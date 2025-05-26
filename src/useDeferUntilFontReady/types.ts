@@ -1,11 +1,11 @@
 import { FontVariant } from 'fontfaceobserver';
 import { ReactNode } from 'react';
-import { useDeferUntilReadyOptions } from '../useDeferUntilReady';
+import { UseDeferUntilReadyOptions } from '../useDeferUntilReady';
 
 export type UseDeferUntilFontReadyOptions<
   P extends ReactNode = ReactNode,
   E extends ReactNode = ReactNode,
-> = useDeferUntilReadyOptions<P, E> & {
+> = UseDeferUntilReadyOptions<P, E> & {
   /**
    *　フォントの詳細なスタイル
    */

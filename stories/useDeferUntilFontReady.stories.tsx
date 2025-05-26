@@ -1,20 +1,27 @@
 import type { ArgTypes, Meta, StoryObj } from '@storybook/react';
+import 'material-symbols';
 import { FC, forwardRef } from 'react';
-import useDeferUntilChange, {
-  UseDeferUntilChangeOptions,
-} from '../src/useDeferUntilChange';
+import useDeferUntilFontReady, {
+  UseDeferUntilFontReadyOptions,
+} from '../src/useDeferUntilFontReady';
 import { baseArgTypes } from './argTypes';
 
-type ComponentProps = UseDeferUntilChangeOptions & {
-  value?: string;
+type ComponentProps = UseDeferUntilFontReadyOptions & {
+  target?: string;
+  fontFamily?: string;
 };
 
 const Component: FC<ComponentProps> = (props) => {
-  const { value, pending, ...options } = props;
-  const { node, state } = useDeferUntilChange(<>{value}</>, value, {
-    pending: <>{pending}</>,
-    ...options,
-  });
+  const { target = 'OK', fontFamily, pending, error, ...options } = props;
+  const { node, state } = useDeferUntilFontReady(
+    <span className="material-symbols-outlined">{target}</span>,
+    fontFamily,
+    {
+      pending: <>{pending}</>,
+      error: <>{error}</>,
+      ...options,
+    },
+  );
   return node;
 };
 
@@ -29,7 +36,7 @@ const argTypes: ArgTypes<ComponentProps> = {
 };
 
 const meta = {
-  title: 'useDeferUntilChange',
+  title: 'useDeferUntilFontReady',
   component: Component,
 } satisfies Meta<typeof Component>;
 
@@ -39,7 +46,8 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   argTypes,
   args: {
-    value: 'OK',
+    target: 'home',
+    fontFamily: 'Material Symbols Outlined',
     readyDefer: 1000,
   },
 };
@@ -47,7 +55,8 @@ export const Default: Story = {
 export const Pending: Story = {
   argTypes,
   args: {
-    value: 'OK',
+    target: 'home',
+    fontFamily: 'Material Symbols Outlined',
     pending: 'Pending...',
     readyDefer: 1000,
   },
@@ -56,7 +65,8 @@ export const Pending: Story = {
 export const PreserveOnceReady: Story = {
   argTypes,
   args: {
-    value: 'OK',
+    target: 'home',
+    fontFamily: 'Material Symbols Outlined',
     preserveOnceReady: true,
     readyDefer: 1000,
   },

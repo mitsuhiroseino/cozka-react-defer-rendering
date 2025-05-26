@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { UseDeferUntilTrueOptions } from '../useDeferUntilTrue';
 
-export type UseDeferUntilBreakpointOptions<P extends ReactNode = ReactNode> =
+export type UseDeferUntilRenderOptions<P extends ReactNode = ReactNode> =
   UseDeferUntilTrueOptions<P> & {
     /**
      * エレメントを監視する間隔（ミリ秒）

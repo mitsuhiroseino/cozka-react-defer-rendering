@@ -1495,6 +1495,7 @@ __metadata:
     globals: "npm:^16.0.0"
     jest: "npm:^29.5.0"
     lodash-es: "npm:^4.17.21"
+    material-symbols: "npm:^0.31.3"
     playwright: "npm:^1.52.0"
     prettier: "npm:^3.5.3"
     prettier-plugin-organize-imports: "npm:^4.1.0"
@@ -7325,6 +7326,13 @@ __metadata:
   version: 1.5.0
   resolution: "map-or-similar@npm:1.5.0"
   checksum: 10c0/33c6ccfdc272992e33e4e99a69541a3e7faed9de3ac5bc732feb2500a9ee71d3f9d098980a70b7746e7eeb7f859ff7dfb8aa9b5ecc4e34170a32ab78cfb18def
+  languageName: node
+  linkType: hard
+
+"material-symbols@npm:^0.31.3":
+  version: 0.31.3
+  resolution: "material-symbols@npm:0.31.3"
+  checksum: 10c0/5198a91f0fd5b68dea93b653c1ab5d26a4887180de8caacf98cf58cfb57aeac4737f9dab4f9609abed25b1c50a190756dfe1dee5bbf6916347630a6fcb7b6938
   languageName: node
   linkType: hard
 

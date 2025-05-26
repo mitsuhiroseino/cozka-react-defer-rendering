@@ -19,12 +19,9 @@ export default function useDeferUntilChange<T extends ReactNode, P>(
   value: unknown,
   options: UseDeferUntilChangeOptions<P> = {},
 ): DeferRenderingResult<T | P> {
-  const { initialValueAsChange, ...opts } = options;
-  const [prevValue, setPrevValue] = useState<unknown>(
-    initialValueAsChange ? NO_VALUE : value,
-  );
+  const [prevValue, setPrevValue] = useState<unknown>(NO_VALUE);
   const isMounted = useIsMounted();
-  const result = useDeferUntilTrue(target, prevValue === value, opts);
+  const result = useDeferUntilTrue(target, prevValue === value, options);
 
   useEffect(() => {
     if (isMounted()) {
