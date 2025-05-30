@@ -6,7 +6,9 @@ export type UseDeferUntilScrolledOptions<P extends ReactNode = ReactNode> =
     /**
      * 監視するコンテナーの参照
      */
-    containerRef?: RefObject<Element | null | undefined>;
+    rootRef?: RefObject<Element | null | undefined>;
+
+    rootMargin?: number;
 
     /**
      * スクロールイベントのデバウンス時間（ミリ秒）
@@ -14,4 +16,9 @@ export type UseDeferUntilScrolledOptions<P extends ReactNode = ReactNode> =
      * @default 100
      */
     detectionDelay?: number;
+
+    /**
+     * 検知するスクロールの方向
+     */
+    direction?: 'vertical' | 'horizontal';
   };

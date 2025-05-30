@@ -1454,7 +1454,7 @@ __metadata:
     "@babel/preset-typescript": "npm:^7.27.0"
     "@chromatic-com/storybook": "npm:3"
     "@cozka/react-style-proxy": "npm:^0.2.5"
-    "@cozka/react-utils": "npm:^0.3.8"
+    "@cozka/react-utils": "npm:^0.3.9"
     "@cozka/rollup-create-dist-packagejson": "npm:^0.8.1"
     "@cozka/utils-css-animations": "npm:^0.1.0"
     "@cozka/utils-dev": "npm:^0.1.1"
@@ -1528,12 +1528,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cozka/react-utils@npm:^0.3.8":
-  version: 0.3.8
-  resolution: "@cozka/react-utils@npm:0.3.8"
+"@cozka/react-utils@npm:^0.3.9":
+  version: 0.3.9
+  resolution: "@cozka/react-utils@npm:0.3.9"
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/6b4b35813c4639357c1a4bae724d6c07b48739ef9331c9cff1d6af36246dcadb9d6f0f44a17b3d79918e38d2e6d039af883aeb12daea457f5fdf5b08286ce5e6
+  checksum: 10c0/3a5296b7ded2d170d33c3922d64c1a7a09de993ca887823e5035f99b4ee3a1909f5f6ed97b55cec4cd4ca79869da940a71a1bba14c71cb933248240b56343b7a
   languageName: node
   linkType: hard
 

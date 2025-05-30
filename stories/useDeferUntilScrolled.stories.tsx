@@ -11,16 +11,16 @@ type ComponentProps = UseDeferUntilScrolledOptions & {};
 const Component: FC<ComponentProps> = (props) => {
   const { pending, ...options } = props;
   const elementRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const { node, state } = useDeferUntilScrolled(<>OK</>, elementRef, {
     pending: <>{pending}</>,
-    containerRef,
+    rootRef,
     ...options,
   });
 
   return (
     <div
-      ref={containerRef}
+      ref={rootRef}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -62,6 +62,7 @@ export const Default: Story = {
   argTypes,
   args: {
     readyDefer: 1000,
+    rootMargin: 0,
   },
 };
 
@@ -71,6 +72,7 @@ export const Pending: Story = {
     pending: 'Pending...',
     pendingDefer: 1000,
     readyDefer: 1000,
+    rootMargin: 0,
   },
 };
 
@@ -80,5 +82,6 @@ export const PreserveOnceReady: Story = {
     preserveOnceReady: true,
     pending: 'Pending...',
     readyDefer: 1000,
+    rootMargin: 0,
   },
 };

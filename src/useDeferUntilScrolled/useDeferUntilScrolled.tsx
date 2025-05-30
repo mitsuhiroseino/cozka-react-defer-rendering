@@ -6,7 +6,7 @@ import useDeferUntilTrue from '../useDeferUntilTrue';
 import { UseDeferUntilScrolledOptions } from './types';
 
 /**
- * スクロール位置に基づいて描画を遅延させるhook
+ * 縦または横スクロール位置に基づいて描画を遅延させるhook
  * @param target 描画対象のノード
  * @param elementRef 基準となる要素の参照
  * @param options オプション
@@ -17,13 +17,15 @@ export default function useDeferUntilScrolled<T extends ReactNode, P>(
   elementRef: RefObject<HTMLElement | null | undefined>,
   options: UseDeferUntilScrolledOptions<P> = {},
 ): DeferRenderingResult<T | P> {
-  const defaultContainerRef = useRef<Element | null | undefined>(
+  const defaultRootRef = useRef<Element | null | undefined>(
     document.documentElement,
   );
   const {
-    containerRef = defaultContainerRef,
+    rootRef = defaultRootRef,
+    rootMargin = 0,
     detectionDelay = 100,
     preserveOnceReady,
+    direction = 'vertical',
     ...opts
   } = options;
   const [condition, setCondition] = useState(false);
@@ -31,13 +33,19 @@ export default function useDeferUntilScrolled<T extends ReactNode, P>(
 
   useEffect(() => {
     const element = elementRef.current;
-    const container = containerRef.current;
-    if (element && container) {
+    const root = rootRef.current;
+    if (element && root) {
+      const isVisible =
+        direction === 'vertical'
+          ? (rect: DOMRect) =>
+              rect.top - rootMargin < root.clientHeight &&
+              rect.bottom + rootMargin >= 0
+          : (rect: DOMRect) =>
+              rect.left - rootMargin < root.clientWidth &&
+              rect.right + rootMargin >= 0;
       const checkScroll = () => {
         const rect = element.getBoundingClientRect();
-        const isVisible = rect.top < container.clientHeight && rect.bottom >= 0;
-
-        return isVisible;
+        return isVisible(rect);
       };
 
       // 初期チェック
@@ -53,17 +61,24 @@ export default function useDeferUntilScrolled<T extends ReactNode, P>(
           setCondition(isVisible);
         }
         if (preserveOnceReady) {
-          container.removeEventListener('scroll', debouncedHandleScroll);
+          root.removeEventListener('scroll', debouncedHandleScroll);
         }
       }, detectionDelay);
-      container.addEventListener('scroll', debouncedHandleScroll);
+      root.addEventListener('scroll', debouncedHandleScroll);
 
       // クリーンアップ
       return () => {
-        container.removeEventListener('scroll', debouncedHandleScroll);
+        root.removeEventListener('scroll', debouncedHandleScroll);
       };
     }
-  }, [elementRef.current, containerRef.current]);
+  }, [
+    elementRef.current,
+    rootRef.current,
+    rootMargin,
+    detectionDelay,
+    direction,
+    preserveOnceReady,
+  ]);
 
   return useDeferUntilTrue(target, condition, { preserveOnceReady, ...opts });
 }

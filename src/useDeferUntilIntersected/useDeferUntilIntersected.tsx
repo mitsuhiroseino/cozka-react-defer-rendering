@@ -1,8 +1,9 @@
+import unit from '@cozka/react-utils/unit';
 import useIsMounted from '@cozka/react-utils/useIsMounted';
 import { ReactNode, RefObject, useEffect, useRef, useState } from 'react';
 import { DeferRenderingResult } from '../types';
 import useDeferUntilTrue from '../useDeferUntilTrue';
-import { UseDeferUntilVisibleOptions } from './types';
+import { UseDeferUntilIntersectedOptions } from './types';
 
 /**
  * 基準となる要素がビューポートに入るまで描画を遅延させるhook
@@ -11,14 +12,15 @@ import { UseDeferUntilVisibleOptions } from './types';
  * @param options オプション
  * @returns state（'pending', 'ready'）と状態に応じたノード
  */
-export default function useDeferUntilVisible<T extends ReactNode, P>(
+export default function useDeferUntilIntersected<T extends ReactNode, P>(
   target: T,
   elementRef: RefObject<HTMLElement | null | undefined>,
-  options: UseDeferUntilVisibleOptions<P> = {},
+  options: UseDeferUntilIntersectedOptions<P> = {},
 ): DeferRenderingResult<T | P> {
-  const defaultContainerRef = useRef<Element | null | undefined>(null);
+  const defaultRootRef = useRef<Element | null | undefined>(null);
   const {
-    containerRef = defaultContainerRef,
+    rootRef = defaultRootRef,
+    rootMargin,
     threshold = 0.1,
     ...opts
   } = options;
@@ -27,7 +29,7 @@ export default function useDeferUntilVisible<T extends ReactNode, P>(
 
   useEffect(() => {
     const element = elementRef.current;
-    const container = containerRef.current;
+    const container = rootRef.current;
     if (element) {
       const observer = new IntersectionObserver(
         (entries) => {
@@ -38,6 +40,7 @@ export default function useDeferUntilVisible<T extends ReactNode, P>(
         },
         {
           root: container,
+          rootMargin: unit(rootMargin),
           threshold,
         },
       );
@@ -48,7 +51,7 @@ export default function useDeferUntilVisible<T extends ReactNode, P>(
         observer.disconnect(); // クリーンアップ
       };
     }
-  }, [elementRef.current, containerRef.current, threshold]);
+  }, [elementRef.current, rootRef.current, threshold, rootMargin]);
 
   return useDeferUntilTrue(target, condition, opts);
 }
