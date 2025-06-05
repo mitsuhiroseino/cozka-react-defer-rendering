@@ -5,26 +5,26 @@ import useDeferUntilReady from '../useDeferUntilReady';
 import { UseDeferUntilResolvedOptions } from './types';
 
 /**
- * 処理の完了まで描画を遅延させるhook
+ * Promiseの完了まで描画を遅延させるhook
  * @param target 描画対象のノード
- * @param callback 処理
+ * @param promise プロミス
  * @param options オプション
  * @returns state（'pending', 'ready', 'error'）と状態に応じたノード
  */
 export default function useDeferUntilResolved<T extends ReactNode, P, E>(
   target: T,
-  callback: (() => Promise<void>) | null | undefined,
+  promise: Promise<unknown> | null | undefined,
   options: UseDeferUntilResolvedOptions<P, E> = {},
 ): DeferRenderingResult<T | P | E> {
   const [state, setState] = useState<RenderingState>(
-    callback ? 'pending' : 'ready',
+    promise ? 'pending' : 'ready',
   );
   const isMounted = useIsMounted();
 
   useEffect(() => {
-    if (callback) {
+    if (promise) {
       setState('pending');
-      callback()
+      promise
         .then(() => {
           if (isMounted()) {
             setState('ready');
@@ -36,7 +36,7 @@ export default function useDeferUntilResolved<T extends ReactNode, P, E>(
           }
         });
     }
-  }, [callback]);
+  }, [promise]);
 
   return useDeferUntilReady(target, state, options);
 }

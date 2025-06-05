@@ -10,7 +10,7 @@ import { UseDeferUntilOnReadyOptions } from './types';
  * @param options オプション
  * @returns state（'pending', 'ready', 'error'）と状態に応じたノードと状態変更用のハンドラー
  */
-export default function useDeferUntilOnReady<T extends ReactNode, P, E>(
+export default function useDeferUntilCalledCount<T extends ReactNode, P, E>(
   target: T,
   options: UseDeferUntilOnReadyOptions<P, E>,
 ): DeferRenderingWithHandlersResult<T | P | E> {

@@ -1459,6 +1459,7 @@ __metadata:
     "@cozka/utils-css-animations": "npm:^0.1.0"
     "@cozka/utils-dev": "npm:^0.1.1"
     "@cozka/utils-function": "npm:^0.1.0"
+    "@cozka/utils-lang": "npm:^0.1.2"
     "@eslint/js": "npm:^9.22.0"
     "@rollup/plugin-babel": "npm:^6.0.4"
     "@rollup/plugin-commonjs": "npm:^28.0.3"
@@ -1584,6 +1585,15 @@ __metadata:
     "@cozka/utils-array": "npm:^0.1.0"
     lodash-es: "npm:^4.17.21"
   checksum: 10c0/547c0355b9fdf8a72d6a5f5bf3677de9e7d528ef9d29049933c02ff940b75bd5577b5e6153a2c069db0e89e4f8ff2b59546631303dde092e0725a3be8353af40
+  languageName: node
+  linkType: hard
+
+"@cozka/utils-lang@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@cozka/utils-lang@npm:0.1.2"
+  dependencies:
+    lodash-es: "npm:^4.17.21"
+  checksum: 10c0/dccb71e60e08c1d5ccb4854e4dcd5b73b6abaac46be923fcfd5fca1bca5116ec4292e4e215febd74f7a3042edafa27b6b26fce92fed5fb33d4a7844efb9d0890
   languageName: node
   linkType: hard
 

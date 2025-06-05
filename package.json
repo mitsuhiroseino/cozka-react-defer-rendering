@@ -1,6 +1,6 @@
 {
   "name": "@cozka/react-defer-rendering",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "keywords": [
     "react",
     "layout",
@@ -36,6 +36,7 @@
     "@cozka/react-utils": "^0.3.9",
     "@cozka/utils-css-animations": "^0.1.0",
     "@cozka/utils-function": "^0.1.0",
+    "@cozka/utils-lang": "^0.1.2",
     "fontfaceobserver": "^2.3.0",
     "lodash-es": "^4.17.21"
   },

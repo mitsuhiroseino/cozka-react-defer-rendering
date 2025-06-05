@@ -1,7 +1,6 @@
 import useIsMounted from '@cozka/react-utils/useIsMounted';
-import { set } from 'lodash';
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { DeferRenderingResult, RenderingState } from '../types';
+import { ReactNode, useEffect, useState } from 'react';
+import { DeferRenderingResult } from '../types';
 import useDeferUntilTrue from '../useDeferUntilTrue';
 import { UseDeferUntilChangeOptions } from './types';
 
