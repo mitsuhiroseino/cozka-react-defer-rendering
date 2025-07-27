@@ -10,8 +10,7 @@ const EXTENTION_ESM = '.js';
 const EXTENTION_CJS = '.cjs';
 const OUTPUT = './dist';
 const OUTPUT_ESM = OUTPUT;
-const OUTPUT_CJS_DIR = 'cjs';
-const OUTPUT_CJS = path.join(OUTPUT, OUTPUT_CJS_DIR);
+const OUTPUT_CJS = path.join(OUTPUT, 'cjs');
 const pakcageJson = fs.readJsonSync('./package.json');
 const EXTERNAL = Object.keys({
   ...pakcageJson.dependencies,
@@ -51,19 +50,19 @@ export default defineConfig(({ mode }) => {
               packagejson({
                 content: {
                   type: 'module',
-                  main: `${OUTPUT_CJS_DIR}/index${EXTENTION_CJS}`,
+                  main: `cjs/index${EXTENTION_CJS}`,
                   module: `index${EXTENTION_ESM}`,
                   types: 'index.d.ts',
                   exports: {
                     '.': {
-                      types: './index.d.js',
+                      types: './index.d.ts',
                       import: './index.js',
-                      require: `./${OUTPUT_CJS_DIR}/index.cjs`,
+                      require: `./cjs/index.cjs`,
                     },
                     './*': {
-                      types: './*/index.d.js',
+                      types: './*/index.d.ts',
                       import: './*/index.js',
-                      require: `./${OUTPUT_CJS_DIR}/*/index.cjs`,
+                      require: `./cjs/*/index.cjs`,
                     },
                   },
                   files: ['**/*'],

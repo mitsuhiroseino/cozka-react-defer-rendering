@@ -14,16 +14,8 @@
   "author": "Mitsuhiro Seino",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.js",
-      "import": "./dist/index.js",
-      "require": "./dist/cjs/index.cjs"
-    },
-    "./*": {
-      "types": "./dist/*/index.d.js",
-      "import": "./dist/*/index.js",
-      "require": "./dist/cjs/*/index.cjs"
-    }
+    ".": "./src/index.ts",
+    "./*": "./src/*/index.ts"
   },
   "scripts": {
     "build": "rimraf dist && tsc -b && vite build && vite build --mode cjs",
